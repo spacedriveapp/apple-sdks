@@ -3,6 +3,11 @@ on:
   push:
     tags:
       - '*'
+    branches:
+      - main
+  pull_request:
+    paths:
+      - '.github/workflows/sdk.yml'
   workflow_dispatch:
 
 # Cancel previous runs of the same workflow on the same branch.
@@ -32,6 +37,7 @@ jobs:
             | parallel -j$(sysctl -n hw.ncpu) tar -cJf "/tmp/{/}.tar.xz" -C {} .;
 
       - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           body: 'Apple SDKs'
