@@ -27,7 +27,7 @@ jobs:
         run: |
           set -euxo pipefail
           export XZ_OPT="-T1 -9"
-          find /Applications/Xcode.app -type d -name 'SDKs' \
+          find "$(xcode-select --print-path)" -type d -name 'SDKs' \
             | xargs -I {} find {} -type l -name '*.sdk' \
             | parallel -j$(sysctl -n hw.ncpu) tar -cJf "/tmp/{/}.tar.xz" -C {} .;
 
