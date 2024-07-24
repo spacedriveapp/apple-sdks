@@ -18,13 +18,18 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Install dependencies
+        run: |
+          set -euxo pipefail
+          brew install parallel
+
       - name: Extract and compress Apple SDKs
         run: |
           set -euxo pipefail
           export XZ_OPT="-T1 -9"
           find /Applications/Xcode.app -type d -name 'SDKs' \
             | xargs -I {} find {} -type l -name '*.sdk' \
-            | parallel -j$(nproc) tar -cJf "/tmp/{/}.tar.xz" -C {} .;
+            | parallel -j$(sysctl -n hw.ncpu) tar -cJf "/tmp/{/}.tar.xz" -C {} .;
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
