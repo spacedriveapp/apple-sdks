@@ -34,7 +34,7 @@ jobs:
           export XZ_OPT="-T1 -9"
           find "$(xcode-select --print-path)" -type d -name 'SDKs' \
             | xargs -I {} find {} -type l -name '*.sdk' \
-            | parallel -j$(sysctl -n hw.ncpu) tar -cJf "/tmp/{/}.tar.xz" -C {} .;
+            | parallel -j$(sysctl -n hw.ncpu) tar -cJf "/tmp/{/}.tar.xz" -C {} .
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
